@@ -8,7 +8,8 @@ namespace WindowsFormsApp1
 {
     class IntNode: OneNode
     {
-        int Finfo;
+        int Info;
+        public int Finfo { get { return Info; } set { Info = value; } }
         public IntNode(int a):base()
         {
             Finfo = a;
@@ -17,18 +18,22 @@ namespace WindowsFormsApp1
         public override bool LoadNodeFromString (ref string st, ref int pos)
         {
             string buff="";
-            while (pos < st.Length && st[pos] >= '0' && st[pos]<='9')
+            while (pos < st.Length && Char.IsDigit(st[pos]))
             {
                 buff += st[pos];
-                pos++;
+                ++pos;
             }
-            int.TryParse(buff, out Finfo);
+            int.TryParse(buff, out Info);
             return true;
         }
         public override string ToString()
         {
             return Finfo.ToString() + " ";
         }
-        
+        public override OneNode Copy()
+        {
+            IntNode result = new IntNode(this.Finfo);
+            return result;
+        }
     }
 }
