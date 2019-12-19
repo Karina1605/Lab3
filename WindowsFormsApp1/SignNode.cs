@@ -12,6 +12,8 @@ namespace WindowsFormsApp1
     {
         Sign sign;
         public Sign Sign { get { return sign; } }
+        public override string GetString
+        { get { return Sings[(int)sign].ToString(); } }
         static readonly char[] Sings = { '+', '-', '*', '/', '?' };
         public SignNode( Sign c): base()
         {
@@ -49,7 +51,7 @@ namespace WindowsFormsApp1
                         {
                        
                             sign = (Sign)p;
-                            MessageBox.Show("Sign in reading = " + st[pos] + " p = " + p+" si = "+sign);
+                           // MessageBox.Show("Sign in reading = " + st[pos] + " p = " + p+" si = "+sign);
                             ++pos;
                             right = OneNode.NewNode(ref st, ref pos);
                             if (right == null)
@@ -62,7 +64,7 @@ namespace WindowsFormsApp1
                                     res = false;
                                 else
                                     ++pos;
-                                MessageBox.Show("res = " + res);
+                              //  MessageBox.Show("res = " + res);
                             }
                         }
                     }
@@ -71,7 +73,7 @@ namespace WindowsFormsApp1
         }
         public override string ToString()
         {
-            return Sings[(int)sign].ToString();
+            return "("+left.ToString()+Sings[(int)sign].ToString()+right.ToString()+")";
         }
     }
 }

@@ -26,10 +26,7 @@ namespace WindowsFormsApp1
         private void BEnter_Click(object sender, EventArgs e)
         {
             string t =TInput.Text;
-            if (tree.TryLaodFromString(t))
-                MessageBox.Show("Ok");
-            else
-                MessageBox.Show("Not");
+            tree.TryLaodFromString(t);
             tree.Print(TStartTree);
         }
 

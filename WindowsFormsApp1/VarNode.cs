@@ -9,7 +9,13 @@ namespace WindowsFormsApp1
     class VarNode: OneNode
     {
         string variable;
-
+        public override string GetString
+        {
+            get
+            {
+                return variable;
+            }
+        }
         public VarNode(string st): base()
         {
             variable = st;

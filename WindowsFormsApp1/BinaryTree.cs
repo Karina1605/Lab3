@@ -12,19 +12,21 @@ namespace WindowsFormsApp1
         OneNode Root;
         public BinaryTree()
         {
-            Root = null;
+            Root = new VarNode("X");
         }
         public bool TryLaodFromString (string st)
         {
             bool res = true;
             Clear();
+            //Root = null;
             int pos = 0;
             Root = OneNode.NewNode(ref st, ref pos);
-            MessageBox.Show("In load tree "+ Root.ToString());
+            //MessageBox.Show("In load tree "+ Root.ToString());
             while (pos < st.Length && st[pos] == ' ')
                 ++pos;
-            if (pos!=st.Length)
+            if (pos!=st.Length || Root==null)
             {
+                //MessageBox.Show("Can't");
                 Clear();
                 res = false;
             }
@@ -32,7 +34,7 @@ namespace WindowsFormsApp1
         }
         public void Clear()
         {
-            Root = null;
+            Root = new VarNode("X");
         }
         public override string ToString()
         {
@@ -55,7 +57,7 @@ namespace WindowsFormsApp1
                     if (l == null || r == null)
                         return false;
                     Sign s = ((SignNode)R).Sign;
-                    MessageBox.Show("Here, s = " + s.ToString());
+                   // MessageBox.Show("Here, s = " + s.ToString());
                     if (l is IntNode && r is IntNode)
                     {
                         int left = ((IntNode)l).Finfo;
@@ -95,31 +97,7 @@ namespace WindowsFormsApp1
                                     TryClear(ref R, ref count);
                                 }
                                 else
-                                if (r is IntNode && ((IntNode)r).Finfo == 0)
-                                {
-                                    R = R.left;
-                                    ++count;
-                                    TryClear(ref R, ref count);
-                                }
-                                else
-                                {
-                                    TryClear(ref R.left, ref count);
-                                    TryClear(ref R.right, ref count);
-                                }
-                                break;
-                            case Sign.divide:
-                                if (l is IntNode && ((IntNode)l).Finfo == 0)
-                                {
-                                    R = R.right;
-                                    ++count;
-                                    TryClear(ref R, ref count);
-                                }
-                                else
-                                if (r is IntNode)
-                                    if (((IntNode)r).Finfo == 0)
-                                        return false;
-                                    else
-                                    if (((IntNode)r).Finfo == 1)
+                                    if (r is IntNode && ((IntNode)r).Finfo == 0)
                                     {
                                         R = R.left;
                                         ++count;
@@ -130,6 +108,31 @@ namespace WindowsFormsApp1
                                         TryClear(ref R.left, ref count);
                                         TryClear(ref R.right, ref count);
                                     }
+                                break;
+                            case Sign.divide:
+                                if (l is IntNode && ((IntNode)l).Finfo == 0)
+                                {
+                                    R = new IntNode(0);
+                                    ++count;
+                                }
+                                else
+                                if (r is IntNode)
+                                {
+                                    if (((IntNode)r).Finfo == 0)
+                                        return false;
+                                    else
+                                    if (((IntNode)r).Finfo == 1)
+                                    {
+                                        R = R.left;
+                                        ++count;
+                                        TryClear(ref R, ref count);
+                                    }
+                                }
+                                else
+                                {
+                                    TryClear(ref R.left, ref count);
+                                    TryClear(ref R.right, ref count);
+                                }
                                 break;
                             case Sign.mult:
                                 if (l is IntNode)
@@ -163,11 +166,11 @@ namespace WindowsFormsApp1
                                                 TryClear(ref R, ref count);
                                             }
                                     }
-                                else
-                                {
-                                    TryClear(ref R.left, ref count);
-                                    TryClear(ref R.right, ref count);
-                                }
+                                    else
+                                    {
+                                        TryClear(ref R.left, ref count);
+                                        TryClear(ref R.right, ref count);
+                                    }
                                 break;
                             case Sign.subst:
                                 if (r is IntNode && ((IntNode)r).Finfo == 0)
@@ -192,11 +195,15 @@ namespace WindowsFormsApp1
         public void Simplify()
         {
             int count = 0;
+            bool res;
             do
             {
                 count = 0;
-                TryClear(ref Root, ref count);
-            } while (count != 0);
+                res= TryClear(ref Root, ref count);
+            } while (count != 0 && res);
+            if (!res)
+                Clear();
+            
         }
         void PrintOnScreen(OneNode one, TreeNode tree)
         {
@@ -204,13 +211,13 @@ namespace WindowsFormsApp1
             {
                 if (one.left!=null)
                 {
-                    TreeNode tl = new TreeNode(one.left.ToString());
+                    TreeNode tl = new TreeNode(one.left.GetString);
                     tree.Nodes.Add(tl);
                     PrintOnScreen(one.left, tl);
                 }
                 if(one.right!=null)
                 {
-                    TreeNode tr = new TreeNode(one.right.ToString());
+                    TreeNode tr = new TreeNode(one.right.GetString);
                     tree.Nodes.Add(tr);
                     PrintOnScreen(one.right, tr);
                 }
@@ -220,7 +227,7 @@ namespace WindowsFormsApp1
         }
         public void Print (TreeView tree)
         {
-            TreeNode tr = new TreeNode(Root.ToString());
+            TreeNode tr = new TreeNode(Root.GetString);
             tree.Nodes.Add(tr);
             PrintOnScreen(Root, tr);
         }

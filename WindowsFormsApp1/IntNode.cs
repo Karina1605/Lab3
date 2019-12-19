@@ -9,6 +9,13 @@ namespace WindowsFormsApp1
     class IntNode: OneNode
     {
         int Info;
+        public override string GetString
+        {
+            get
+            {
+                return Info.ToString();
+            }
+        }
         public int Finfo { get { return Info; } set { Info = value; } }
         public IntNode(int a):base()
         {

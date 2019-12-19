@@ -8,7 +8,8 @@ using System.Windows.Forms;
 namespace WindowsFormsApp1
 {
     abstract class OneNode
-    {
+    { 
+        public abstract string GetString { get; }
         public OneNode left;
         public OneNode right;
         public OneNode()
@@ -22,7 +23,7 @@ namespace WindowsFormsApp1
             OneNode res = null;
             while (pos < st.Length && st[pos] == ' ')
                 ++pos;
-            MessageBox.Show("In ONENODE, '" + st[pos] + "'");
+            //MessageBox.Show("In ONENODE, '" + st[pos] + "'");
             if (pos<st.Length)
             {
                 if (Char.IsLower(st[pos]))
